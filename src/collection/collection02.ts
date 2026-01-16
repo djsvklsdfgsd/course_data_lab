@@ -6,8 +6,8 @@ export const obj = {
   a: 1,
   b: 2,
   c: 3,
-  [Symbol.iterator]() {
-
+   [Symbol.iterator]() {
+    return Object.values(this)[Symbol.iterator]();
   }
 };
 
