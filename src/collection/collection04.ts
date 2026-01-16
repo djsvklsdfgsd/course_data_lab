@@ -3,7 +3,11 @@
 */
 
 export function* filterEven(arr: number[]): IterableIterator<number> {
-
+	let i;
+	for (i of arr){
+		if (i % 2 === 0) {
+			yield i;
+		}
+	}
 }
-
 
