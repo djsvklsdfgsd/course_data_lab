@@ -3,5 +3,13 @@
 */
 
 export function getUnique(arr: number[]): number[] {
+	const set = new Set(arr);
+	const res = [];
+	let value;
 
+	for (value of set) {
+		res.push(value);
+	}
+
+	return res;
 }
