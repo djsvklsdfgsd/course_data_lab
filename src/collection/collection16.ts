@@ -3,7 +3,13 @@
 */
 
 export type Result = {num: number, square: number, index: number};
-
+	
 export function squaresWithIndex(numbers: number[]): Result[] {
-
+	return numbers.map(function(num, index) {
+		return {
+			num: num,
+			square: num * num,
+			index: index
+		};
+	});
 }
