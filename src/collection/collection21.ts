@@ -5,5 +5,12 @@
 export type Product = { price: number; discount: boolean; inStock: boolean };
 
 export function getDiscountedInStockTotal(products: Product[]): number {
+	let total = 0;
 
+	for (const product of products) {
+		if (product.inStock && product.discount) {
+			total += product.price;
+		}
+	}
+	return total;
 }
