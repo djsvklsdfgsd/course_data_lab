@@ -10,7 +10,7 @@ export function groupUnfinishedHighPriorityTasks(tasks: Task[]): Map<string, Tas
 	for (const task of tasks) {
 		if (!task.completed && task.priority === "high") {
 			if (!result.has(task.category)) {
-				result.set(task.category []);
+				result.set(task.category, []);
 			}
 			result.get(task.category)!.push(task);
 		}
