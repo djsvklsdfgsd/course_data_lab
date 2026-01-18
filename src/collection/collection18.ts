@@ -5,5 +5,5 @@
 type Product = {name: string, price: number, inStock: boolean};
 
 export function getAffordableInStockProducts(products: Product[]): string[] {
-
+	return products.filter(p => p.price < 1000 && p.inStock).map(p => p.name);
 }
