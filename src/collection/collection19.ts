@@ -9,7 +9,7 @@ type User = {
 };
 
 export function getTopAdultUsers(users: User[]): User[] {
-
+  return users.filter(u => u.age > 18 && u.rating > 4.5).sort((a,b) => a.name.localeCompare(b.name));
 }
 
 
