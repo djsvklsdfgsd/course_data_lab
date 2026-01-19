@@ -6,5 +6,9 @@ type Product = {name: string, price: number};
 type GroupedProducts = {cheap: Product[], medium: Product[], expensive: Product[]};
 
 export function groupProductsByPrice(products: Product[]): GroupedProducts {
+	const cheap = products.filter(p => p.price < 1000);
+	const medium = products.filter(p => p.price >= 1000 && p.price <= 5000);
+	const expensive = products.filter(p => p.price > 5000);
 
+	return {cheap, medium, expensive};
 }
