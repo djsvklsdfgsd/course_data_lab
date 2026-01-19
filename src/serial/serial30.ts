@@ -11,6 +11,10 @@ export function parseSafely(xml: string): { success: boolean; error?: string } {
   
   // TODO: Добавьте обработчик ошибок, который установит success = false и сохранит сообщение об ошибке
   
+  parser.onerror = (error) => {
+    result.success = false;
+    result.error = error.message;
+  };
   
   try {
     parser.write(xml).close();
@@ -19,4 +23,3 @@ export function parseSafely(xml: string): { success: boolean; error?: string } {
   }
   return result;
 }
-
