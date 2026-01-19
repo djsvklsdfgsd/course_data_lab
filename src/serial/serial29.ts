@@ -13,8 +13,33 @@ export function findBookById(xml: string, targetId: string): string | null {
   let foundBook = false;
   let isTitleTag = false;
   
-// TODO: Реализуйте логику поиска книги по ID и извлечения её названия
-  
+  parser.onopentag = (node) => {
+    if (node.name === 'book') {
+      const id = node.attributes.id;
+      if (id === targetId) {
+        foundBook = true;
+        currentId = id;
+      }
+    }
+    
+    if (node.name === 'title' && foundBook) {
+      isTitleTag = true;
+      currentTitle = "";
+    }
+  };
+
+  parser.ontext = (text) => {
+    if (isTitleTag) {
+      currentTitle += text;
+    }
+  };
+
+  parser.onclosetag = (tagName) => {
+    if (tagName === 'title' && foundBook) {
+      isTitleTag = false;
+    }
+  };
+
   parser.write(xml).close();
   return foundBook ? currentTitle.trim() : null;
 }
