@@ -17,7 +17,15 @@ export interface RegionSales {
 
 export async function get_total_sales_by_region(db: Db): Promise<RegionSales[]> {
     // TODO: Посчитать общую сумму продаж по каждому региону
-    return  await db.collection("sales").aggregate(
-		
-	).toArray() as RegionSales[]
+    return await db.collection("sales").aggregate([
+        {
+            $group: {
+                _id: "$region",
+                total: { $sum: "$amount" } 
+            }
+        },
+        {
+            $sort: { _id: 1 } 
+        }
+    ]).toArray() as RegionSales[]
 }
