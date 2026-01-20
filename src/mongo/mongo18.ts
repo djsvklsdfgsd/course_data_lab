@@ -23,8 +23,17 @@ export interface DepartmentStats {
 
 export async function get_department_stats(db: Db): Promise<DepartmentStats[]> {
 	// TODO: Получить статистику по отделам: средняя зарплата, максимальная зарплата, количество сотрудников
-	return await db.collection("employees").aggregate([
-
-	]).toArray() as DepartmentStats[]
+    return await db.collection("employees").aggregate([
+        {
+            $group: {
+                _id: "$department",
+                avgSalary: { $avg: "$salary" },
+                maxSalary: { $max: "$salary" },
+                employeeCount: { $sum: 1 }
+            }
+        },
+        {
+            $sort: { _id: 1 }
+        }
+    ]).toArray() as DepartmentStats[]
 }
-
