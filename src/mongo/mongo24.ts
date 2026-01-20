@@ -45,6 +45,19 @@ export async function get_books_with_authors(db: Db): Promise<BookWithAuthor[]> 
                 as: "authorInfo"
             }
         },
-
+        {
+            $unwind: "$authorInfo" 
+        },
+        {
+            $addFields: {
+                authorName: "$authorInfo.name",
+                authorCountry: "$authorInfo.country"
+            }
+        },
+        {
+            $project: {
+                authorInfo: 0 
+            }
+        }
     ]).toArray() as BookWithAuthor[]
 }
