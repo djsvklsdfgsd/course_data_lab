@@ -35,9 +35,28 @@ export interface OrderWithUser {
 
 export async function get_orders_with_users(db: Db): Promise<OrderWithUser[]> {
     // TODO: Объединить заказы с информацией о пользователях
-	return await db.collection("orders").aggregate([
-
+    return await db.collection("orders").aggregate([
+        {
+            $lookup: {
+                from: "users",
+                localField: "userId",
+                foreignField: "_id",
+                as: "userInfo" 
+            }
+        },
+        {
+            $addFields: {
+                userInfo: {
+                    $map: {
+                        input: "$userInfo",
+                        as: "user",
+                        in: {
+                            name: "$$user.name",
+                            email: "$$user.email"
+                        }
+                    }
+                }
+            }
+        }
     ]).toArray() as OrderWithUser[]
 }
-
-
