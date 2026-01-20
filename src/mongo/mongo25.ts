@@ -59,7 +59,7 @@ export interface DepartmentDetails {
 
 export async function get_department_details(db: Db): Promise<DepartmentDetails[]> {
     // TODO: Получить детальную информацию по отделам: сотрудники и проекты
-	return await db.collection("departments").aggregate([
+    return await db.collection("departments").aggregate([
         {
             $lookup: {
                 from: "employees",
@@ -76,6 +76,33 @@ export async function get_department_details(db: Db): Promise<DepartmentDetails[
                 as: "projects"
             }
         },
-        
+        {
+            $addFields: {
+                employees: {
+                    $map: {
+                        input: "$employees",
+                        as: "emp",
+                        in: {
+                            name: "$$emp.name",
+                            position: "$$emp.position",
+                            salary: "$$emp.salary"
+                        }
+                    }
+                },
+                projects: {
+                    $map: {
+                        input: "$projects",
+                        as: "proj",
+                        in: {
+                            name: "$$proj.name",
+                            budget: "$$proj.budget",
+                            status: "$$proj.status"
+                        }
+                    }
+                },
+                totalBudget: { $sum: "$projects.budget" },
+                employeeCount: { $size: "$employees" }
+            }
+        }
     ]).toArray() as DepartmentDetails[]
 }
