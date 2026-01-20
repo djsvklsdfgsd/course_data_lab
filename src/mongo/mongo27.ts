@@ -23,7 +23,21 @@ export async function get_price_distribution(db: Db): Promise<PriceBucket[]> {
     // TODO: Сгруппировать продукты по ценовым диапазонам:
     // 0-50, 51-200, 201-500, 501-1000, 1001+
 	// Использовать $bucket
-	return await db.collection("products").aggregate([
-
-	]).toArray() as PriceBucket[]
+    return await db.collection("products").aggregate([
+        {
+            $bucket: {
+                groupBy: "$price",
+                boundaries: [0, 51, 201, 501, 1001],
+                default: "1001+",
+                output: {
+                    count: { $sum: 1 },
+                    avgPrice: { $avg: "$price" },
+                    products: { $push: "$name" }
+                }
+            }
+        },
+        {
+            $sort: { _id: 1 }
+        }
+    ]).toArray() as PriceBucket[]
 }
